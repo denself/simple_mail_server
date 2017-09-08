@@ -1,4 +1,9 @@
+import logging
+
 from aiosmtpd.smtp import Envelope, Session, SMTP
+
+
+log = logging.getLogger("smtphandler")
 
 
 class ExampleHandler:
@@ -8,8 +13,10 @@ class ExampleHandler:
                           envelope: Envelope,
                           address: str,
                           rcpt_options: list):
-        if not address.endswith('@example.com'):
-            return '550 not relaying to that domain'
+        # Accept all incoming mail for now
+        # if not address.endswith('@example.com'):
+        #     return '550 not relaying to that domain'
+        log.info("Handle RCPT for %s", address)
         envelope.rcpt_tos.append(address)
         return '250 OK'
 
@@ -17,9 +24,8 @@ class ExampleHandler:
                           server: SMTP,
                           session: Session,
                           envelop: Envelope):
-        content = envelop.content.decode("utf8", errors="replace")
-        print(f'Message from {envelop.mail_from}')
-        print(f'Message for {envelop.rcpt_tos}')
-        print(f'Message data:\n{content}')
-        print('End of message')
+        content = envelop.content
+        log.debug('Message from %s', envelop.mail_from)
+        log.debug('Message for %s', envelop.rcpt_tos)
+        log.debug('Message data:\n%s\n%s', content, '*'*20)
         return '250 Message accepted for delivery'

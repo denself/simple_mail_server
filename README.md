@@ -28,11 +28,23 @@ pip install -r requirements.txt
 
 ## Running server
 
-Server support two optional settings, that cen be changed using environment variables:
+Server support two optional settings, that cen be changed using environment 
+variables:
 
 `SMTP_HOST` defines host, on which server accepts connections. `*` for all.
 
-`SMTP_PORT` defines servers port. 
+Keep in mind, that if you setting `SMTP_HOST=::1`, that you should setup DNS 
+record that supports IPv6.
+
+
+`SMTP_PORT` defines servers port. Default ports for SMTP are 25, 2525, 587 and 
+465, 25, 587, 2526 for Secure SMTP
+ 
+To start server just run:
+```bash
+./main.py
+```
+
 
 ## DNS settings
 
@@ -46,7 +58,7 @@ mx.example.com   A   1.2.3.4
 - Another on `MX` record, that points to previous `A` record.
 ```
 example.com      MX   mx.example.com
-```
+``` 
 
 TODO: SPF/DKIM/DMARC records
 https://www.namecheap.com/support/knowledgebase/article.aspx/317/2237/how-do-i-add-txtspfdkimdmarc-records-for-my-domain

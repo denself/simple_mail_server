@@ -16,14 +16,18 @@ logging.basicConfig(
     stream=sys.stdout
 )
 
+log = logging.getLogger()
+
 
 if __name__ == '__main__':
-    host = os.getenv('SMTP_HOST', '::1')
-    port = os.getenv('SMTP_PORT', '8025')
+    host = os.getenv('SMTP_HOST', '*')
+    port = os.getenv('SMTP_PORT', '25')
 
     loop = asyncio.get_event_loop()
     controller = Controller(ExampleHandler(), hostname=host, port=port)
     controller.start()
+
+    log.info("SMTP server started on %s:%s", host, port)
 
     try:
         loop.run_forever()
