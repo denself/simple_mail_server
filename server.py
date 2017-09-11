@@ -1,7 +1,9 @@
+import email
 import logging
 
 from aiosmtpd.smtp import Envelope, Session, SMTP
 
+from tools import message_to_display
 
 log = logging.getLogger("smtphandler")
 
@@ -24,8 +26,9 @@ class ExampleHandler:
                           server: SMTP,
                           session: Session,
                           envelop: Envelope):
-        content = envelop.content
+        payload = email.message_from_bytes(envelop.content)
+        text = message_to_display(payload)
         log.debug('Message from %s', envelop.mail_from)
         log.debug('Message for %s', envelop.rcpt_tos)
-        log.debug('Message data:\n%s\n%s', content, '*'*20)
+        log.debug('Message data:\n%s', text)
         return '250 Message accepted for delivery'

@@ -1,13 +1,18 @@
 #!/usr/bin/env python3.6
+# -*- coding: utf-8 -*-
 import asyncio
 import logging
-
 import os
 
 import sys
 from aiosmtpd.controller import Controller
 
 from server import ExampleHandler
+
+
+__version__ = '0.0.1'
+__author__ = "Denys Ivanets"
+__email__ = "mail@denself.me"
 
 
 logging.basicConfig(
