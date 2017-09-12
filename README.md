@@ -62,5 +62,29 @@ example.com      MX   mx.example.com
 
 TODO: SPF/DKIM/DMARC records
 https://www.namecheap.com/support/knowledgebase/article.aspx/317/2237/how-do-i-add-txtspfdkimdmarc-records-for-my-domain
+
+
+## Supervisor
+
+Install supervisor: 
+```bash
+apt install supervisor
+```
+
+Copy file `supervisor.ini` to you supervisor's `conf.d` directory:
+
+```bash
+cp supervisor.ini /etc/supervisor/conf.d/smtp_server.ini
+```
+
+Edit all variables to match your environment.
+
+Start server:
+
+```bash
+supervisorctl reread
+supervisorctl update
+supervisorctl start smtp-server
+```
     
     
