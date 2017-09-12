@@ -74,7 +74,7 @@ apt install supervisor
 Copy file `supervisor.ini` to you supervisor's `conf.d` directory:
 
 ```bash
-cp supervisor.ini /etc/supervisor/conf.d/smtp_server.ini
+cp supervisor.conf /etc/supervisor/conf.d/smtp_server.conf
 ```
 
 Edit all variables to match your environment.
