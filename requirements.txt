@@ -1,3 +1,6 @@
 pytest
 pytest-asyncio
 aiosmtpd
+py3dns
+dkimpy
+pyspf
