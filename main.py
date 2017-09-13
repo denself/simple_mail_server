@@ -27,9 +27,13 @@ log = logging.getLogger()
 if __name__ == '__main__':
     host = os.getenv('SMTP_HOST', '*')
     port = os.getenv('SMTP_PORT', '25')
+    accept_host = os.getenv('ACCEPT_HOST')
 
     loop = asyncio.get_event_loop()
-    controller = Controller(ExampleHandler(), hostname=host, port=port)
+
+    handler = ExampleHandler(accept_host)
+
+    controller = Controller(handler, hostname=host, port=port)
     controller.start()
 
     log.info("SMTP server started on %s:%s", host, port)

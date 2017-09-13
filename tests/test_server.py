@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.6
 # -*- coding: utf-8 -*-
-
 import pytest
 from aiosmtpd.smtp import Envelope, SMTP, Session
 
@@ -10,7 +9,7 @@ from server import ExampleHandler
 class TestExampleHandler:
 
     def setup_method(self, method):
-        self.handler = ExampleHandler(verify_spf=True)
+        self.handler = ExampleHandler('gmail.com', verify_spf=True)
         self.envelope = Envelope()
         self.envelope.content = b"""From: Cate Person <cate@gmail.com>
 To: Dave Person <dave@gmail.com>
@@ -80,7 +79,21 @@ Hi Dave, this is Cate."""
             self.server,
             Session(server.loop),
             self.envelope,
-            '',
+            'a@gmail.com',
             []
         )
         assert response == '250 OK'
+
+    @pytest.mark.asyncio
+    async def test_handle_RCPT_decline(self):
+        # In this test, the message data comes in as bytes.
+        server = SMTP(self.handler)
+
+        response = await self.handler.handle_RCPT(
+            self.server,
+            Session(server.loop),
+            self.envelope,
+            'a@gmail.net',
+            []
+        )
+        assert response == '550 not relaying to that domain'

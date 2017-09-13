@@ -16,8 +16,10 @@ test_results = ['FAIL', 'PASS']
 class ExampleHandler:
 
     def __init__(self,
+                 accept_host: str = None,
                  verify_dkim: bool = False,
                  verify_spf: bool = False):
+        self.accept_host = accept_host
         self.verify_dkim = verify_dkim
         self.verify_spf = verify_spf
 
@@ -30,10 +32,12 @@ class ExampleHandler:
 
         ip = session.peer[0]
         result, description = spf.check2(ip, address, session.host_name)
+        valid_spf = result == 'pass'
+        envelope.spf = valid_spf
 
         log.info("SPF: %s, %s", result, description)
 
-        if self.verify_spf and result != 'pass':
+        if self.verify_spf and not valid_spf:
             return '550 SPF validation failed'
 
         envelope.mail_from = address
@@ -47,9 +51,8 @@ class ExampleHandler:
                           envelope: Envelope,
                           address: str,
                           rcpt_options: list):
-        # Accept all incoming mail for now
-        # if not address.endswith('@example.com'):
-        #     return '550 not relaying to that domain'
+        if self.accept_host and not address.endswith('@' + self.accept_host):
+            return '550 not relaying to that domain'
         log.debug("Handle RCPT for %s", address)
         envelope.rcpt_tos.append(address)
         return '250 OK'
@@ -60,6 +63,7 @@ class ExampleHandler:
                           envelope: Envelope):
 
         valid_dkim = dkim.verify(envelope.content)
+        envelope.dkim = valid_dkim
         log.info("DKIM: %s", test_results[valid_dkim])
 
         message: Message = email.message_from_bytes(envelope.content)
