@@ -23,6 +23,14 @@ class ExampleHandler:
         self.verify_dkim = verify_dkim
         self.verify_spf = verify_spf
 
+
+    # async def handle_EHLO(self,
+    #                       server: SMTP,
+    #                       session: Session,
+    #                       envelope: Envelope,
+    #                       hostname: str):
+    #     return '250-AUTH PLAIN'
+
     async def handle_MAIL(self,
                           server: SMTP,
                           session: Session,

@@ -39,6 +39,13 @@ record that supports IPv6.
 
 `SMTP_PORT` defines servers port. Default ports for SMTP are 25, 2525, 587 and 
 465, 25, 587, 2526 for Secure SMTP
+
+`SSL_KEYS` path to ssl keys. Example:
+```bash
+SSL_KEYS=/path/to/key
+```
+mean that there should exist files `key.pem` and `key.crt` in directory 
+`/path/to/`
  
 To start server just run:
 ```bash
